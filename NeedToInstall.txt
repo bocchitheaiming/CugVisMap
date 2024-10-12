@@ -1,0 +1,1 @@
+npm i @amap/amap-jsapi-loader --save
