@@ -14,5 +14,5 @@ Vscode切换到CugGis.js文件,终端输入`yarn start`
 # 项目资源
 React教程:https://react.docschina.org/learn
 高德地图API:https://lbs.amap.com/api/javascript-api-v2/summary
-Ant Design:https://ant.design/docs/react/introduce-cn(还没安装)
+Ant Design:https://ant.design/docs/react/introduce-cn
 d3.js:https://d3js.org/

@@ -1,0 +1,101 @@
+.container
+{
+  position: absolute;
+  padding: 0px;
+  margin: 0px;
+  width: 100%;
+
+}
+.panel1
+{
+  position: absolute;
+  // padding: 0px;
+  // margin: 0px;
+  width: 40vw;
+  height: 20vh;
+  margin-left: 0vw;
+  margin-top: 3h;
+
+  // 圆角
+  border-radius: 10px;
+  
+  // 毛玻璃
+  backdrop-filter: blur(5px);
+  background: transparent;
+
+  // 动画
+  transition: transform 0.5s ease; // 动画过渡效果
+
+  // 子动画状态
+  &.slide-out {
+    transform: translateX(-38vw); // 向右滑动300px
+  }
+
+  
+}
+
+.panel2
+{
+
+  // 位置
+  position: absolute;
+  width: 30vw;
+  height: 38vh;
+  margin-left:65vw;
+  margin-top: 5vh;
+
+  // 圆角
+  border-radius: 10px;
+
+  // 毛玻璃效果
+  backdrop-filter: blur(5px);
+  background: transparent;
+
+}
+
+.panel3
+{
+  // 位置
+  position: absolute;
+  width: 20vw;
+  height: 35vh;
+  margin-left: 75vw;
+  margin-top: 50vh;
+
+  // 圆角
+  border-radius: 10px;
+
+  background: linear-gradient(315deg, #cacaca, #f0f0f0);
+  box-shadow:  -7px -7px 10px #bebebe,
+              7px 7px 10px #ffffff;
+
+}
+
+.panel-container {
+  position: relative; /* 确保子元素的定位是基于这个容器的 */
+  width: 100vw;       /* 设置与视口宽度相同 */
+  height: 100vh;      /* 设置与视口高度相同 */
+  overflow: hidden;   /* 隐藏溢出部分 */
+}
+
+.openablePanel {
+  // 位置
+  position: absolute;
+  margin-top: 89vh;
+  margin-left: 0vw;
+  width: 35vw;
+  height: 21vh;
+  // 颜色
+  background-color: #bebebe;
+  // 圆角
+  border-radius: 10px;
+
+  // 动画效果
+  transition: transform 0.5s ease; // 动画过渡效果
+
+  &.panel-opened {
+    transform: translateY(-10vh);  // 向上移动10vh
+    margin-left: 0vw;
+    width: 35vw;
+  }
+}
