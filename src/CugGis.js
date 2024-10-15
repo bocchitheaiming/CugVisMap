@@ -40,34 +40,25 @@ export default function CugGis() {
           [114.612972, 30.459921],
           [114.614503, 30.460003],
           [114.617943, 30.460166],
-          [114.619947, 30.460312],
-        ];
-        var outer = [
-          // [114.615233,30.459101],
-          // [114.620327,30.456925],
-          // [114.614204,30.457308],
-          new AMap.LngLat(-360, 90, true),
-          new AMap.LngLat(-360, -90, true),
-          new AMap.LngLat(360, -90, true),
-          new AMap.LngLat(360, 90, true),
+          [114.619947, 30.460312]
         ];
 
-        var pathArray = [outer, path];
+        const mask = [path];
 
-        // 创建自定义多边形
-        const customPolygon = new AMap.Polygon({
-          path: pathArray,
-          strokeColor: "#FFFFFF",
-          strokeWeight: 6,
-          strokeOpacity: 0.2,
-          fillOpacity: 1,
-          fillColor: "#FFFFFF",
-          zIndex: 50,
-        });
+        var buildingLayer = new AMap.Buildings({ zIndex: 130, zooms: [16, 20], heightfactor: 2 });
 
-        const bounds = customPolygon.getBounds();
+        var options =
+        {
+          hideWithoutStyle: true,
+          areas: [{
+            path: path
+          }]
+        };
+
+        buildingLayer.setStyle(options); //此配色优先级高于自定义mapStyle
 
         map = new AMap.Map("container", { // 设置地图容器id
+          mask: mask,
           viewMode: "3D", // 是否为3D地图模式
           zoom: 18, // 初始化地图级别，越大比例尺越小
           zooms: [5, 20], // 设置地图缩放范围
@@ -76,7 +67,6 @@ export default function CugGis() {
           scrollWheel: true, // 启用滚轮缩放
           rotateEnable: true, // 是否开启地图旋转交互
           zoomEnable: true, // 是否开启地图缩放交互
-          bounds: bounds, // 设置地图显示范围
           layers: [
             new AMap.TileLayer.Satellite({ tileSize: 256 }),
             new AMap.createDefaultLayer({
@@ -85,12 +75,9 @@ export default function CugGis() {
               opacity: 1, // 透明度
               zIndex: 0, // 叠加层级
             }),
-            new AMap.Buildings({ zIndex: 130, zooms: [16, 20], heightfactor: 2 }),
+            buildingLayer
           ],
         });
-
-        // customPolygon.setPath(pathArray);
-        map.add(customPolygon);
       })
 
       .catch((e) => {
