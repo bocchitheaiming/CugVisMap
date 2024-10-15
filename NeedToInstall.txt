@@ -1,2 +1,3 @@
 高德地图api:npm i @amap/amap-jsapi-loader --save
 更好的样式管理器:yarn add sass -D
+Obeservable:yarn add @observablehq/plot
