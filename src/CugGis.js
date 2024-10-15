@@ -25,11 +25,11 @@ export default function CugGis() {
         ];
 
         var libraryPath = [
-          [114.617528, 30.456566], [114.617867, 30.4565], [114.61912, 30.456153], [114.61756, 30.456076]];
+          [114.617528, 30.456566], [114.619063,30.456669], [114.61912, 30.456153], [114.61756, 30.456076]];
 
-        var canteenPath = [[114.618040, 30.455201], [114.61865, 30.455229], [114.618670, 30.454688], [114.618067, 30.454642]];
+        var canteenPath = [[114.617976,30.4552], [114.618511,30.455229], [114.618542,30.454725], [114.618008,30.454695]];
 
-        var stadiumPath = [[114.62092, 30.458296], [114.622089, 30.458374], [114.62218, 30.457600], [114.62097, 30.457530]];
+        var stadiumPath = [[114.620822,30.458296], [114.62192,30.458371], [114.62198,30.457638], [114.62087,30.457561]];
 
         const mask = [path];
 
@@ -47,7 +47,7 @@ export default function CugGis() {
 
         // 创建自定义多边形, 是以canteenPath为示例，其他也是一样，注意修改下述的变量名
         const canteenPolygon = new AMap.Polygon({
-          path: stadiumPath,
+          path: libraryPath,
           strokeColor: "#2b8cbe",
           strokeWeight: 6,
           strokeOpacity: 0.2,
@@ -58,7 +58,7 @@ export default function CugGis() {
 
         map = new AMap.Map("container", { // 设置地图容器id
           mask: mask,
-          viewMode: "2D", // 是否为3D地图模式
+          viewMode: "3D", // 是否为3D地图模式
           zoom: 18, // 初始化地图级别，越大比例尺越小
           zooms: [5, 20], // 设置地图缩放范围
           center: [114.61716, 30.457544], // 初始化地图中心点位置
