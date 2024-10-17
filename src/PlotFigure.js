@@ -39,5 +39,6 @@ export function BuildHistogram(option1)
         x:{label:"楼层"},
         height:300,
         width:500,
-    })
+        title:"各楼层人数统计"
+    });
 }
