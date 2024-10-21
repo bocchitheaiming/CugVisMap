@@ -10,6 +10,8 @@ import AMapLoader from "@amap/amap-jsapi-loader";
 import { Card } from "antd";
 import { Button } from "antd";
 import { Color } from "antd/es/color-picker";
+import { FloatButton } from "antd";
+import { Carousel } from 'antd';
 
 // VanillaTilt
 import VanillaTilt from 'vanilla-tilt';
@@ -19,7 +21,8 @@ import * as Plot from "@observablehq/plot";
 import * as d3 from "d3";
 
 // Icons
-import Icon, { UpOutlined } from '@ant-design/icons';
+import Icon, { UpOutlined , VerticalLeftOutlined} from '@ant-design/icons';
+import { PlusOutlined, MinusOutlined, EnvironmentOutlined } from "@ant-design/icons";
 
 // Mine
 import { Histogram } from "./PlotFigure";
@@ -58,13 +61,13 @@ export default function CugGis() {
     }
   }
 
-  useEffect(() => {
-    const gram = BuildHistogram(elementDist[positions[positionNow]]["Histogram"]);
-    containerRef.current.append(gram);
-    return () => gram.remove();
-  },[positionNow]);
+  // useEffect(() => {
+  //   const gram = BuildHistogram(elementDist[positions[positionNow]]["Histogram"]);
+  //   containerRef.current.append(gram);
+  //   return () => gram.remove();
+  // },[positionNow]);
 
-  const containerRef = useRef();
+  // const containerRef = useRef();
 
   const [isSlide, setIsSlide] = useState(false);
   function handleSlide() 
@@ -72,13 +75,20 @@ export default function CugGis() {
     setIsSlide(!isSlide);
   }
 
+  // 控制面板2位置1
+  const [isPanel2Slide, setIsPanel2Slide] = useState(false);
+  function handlePanel2Slide()
+  {
+    setIsPanel2Slide(!isPanel2Slide);
+  }
+  // 控制面板main位置
   const [isOpen, setIsOpen] = useState(false);
   function handleOpen() 
   {
     setIsOpen(!isOpen);
   }
 
-  const [data, setData] = useState();
+
 
   // 用reactHook形式加载地图
   let map = null;
@@ -124,22 +134,59 @@ export default function CugGis() {
           fillOpacity: 0.5,
           fillColor: "#ccebc5",
           zIndex: 50,
+        }).on('mouseover', () => {
+          // map.setZoom(20);
+          canteenPolygon.setOptions({
+            fillOpacity: 0.7,
+            fillColor: '#7bccc4'
+          })
+        }).on('mouseout', () => {
+          canteenPolygon.setOptions({
+            fillOpacity: 0.5,
+            fillColor: '#ccebc5'
+          })
+        });
+        const libraryPolygon = new AMap.Polygon({
+          path: libraryPath,
+          strokeColor: "#2b8cbe",
+          strokeWeight: 6,
+          strokeOpacity: 0.2,
+          fillOpacity: 0.5,
+          fillColor: "#ccebc5",
+          zIndex: 50,
+        });
+        const stadiumPolygon = new AMap.Polygon({
+          path: stadiumPath,
+          strokeColor: "#2b8cbe",
+          strokeWeight: 6,
+          strokeOpacity: 0.2,
+          fillOpacity: 0.5,
+          fillColor: "#ccebc5",
+          zIndex: 50,
         });
 
         map = new AMap.Map("container", { // 设置地图容器id
           mask: mask,
-          viewMode: "3D", // 是否为3D地图模式
-          zoom: 18, // 初始化地图级别，越大比例尺越小
-          zooms: [5, 20], // 设置地图缩放范围
-          center: [114.61716, 30.457544], // 初始化地图中心点位置
-          pitch: 70, // 地图俯仰角度，有效范围 0 度- 83 度
-          scrollWheel: true, // 启用滚轮缩放
-          rotateEnable: true, // 是否开启地图旋转交互
-          zoomEnable: true, // 是否开启地图缩放交互
+          // 是否为3D地图模式
+          viewMode: "3D", 
+          // 初始化地图级别，越大比例尺越小
+          zoom: 18, 
+          // 设置地图缩放范围
+          zooms: [5, 22], 
+          // 初始化地图中心点位置
+          center: [114.61716, 30.457544], 
+          // 地图俯仰角度，有效范围 0 度- 83 度
+          pitch: 70, 
+          // 启用滚轮缩放
+          scrollWheel: true, 
+          // 是否开启地图旋转交互
+          rotateEnable: true, 
+          
+          zoomEnable: true, 
           layers: [
             new AMap.TileLayer.Satellite({ tileSize: 256 }),
             new AMap.createDefaultLayer({
-              zooms: [3, 20], // 可见级别
+              zooms: [3, 22], // 可见级别
               visible: true, // 是否可见
               opacity: 1, // 透明度
               zIndex: 0, // 叠加层级
@@ -148,26 +195,42 @@ export default function CugGis() {
           ],
         });
 
-        canteenPolygon.on('mouseover', () => {
+        canteenPolygon.on('dblclick', () => {
+          map.setCenter([114.617976, 30.4552]);
           map.setZoom(20);
-          canteenPolygon.setOptions({
-            fillOpacity: 0.7,
-            fillColor: '#7bccc4'
-          })
-        })
-        canteenPolygon.on('mouseout', () => {
-          canteenPolygon.setOptions({
-            fillOpacity: 0.5,
-            fillColor: '#ccebc5'
-          })
-        })
-
-        canteenPolygon.on('click', () => {
-          handlePosition();
+          map.setRotation(90);
         })
 
         map.add(canteenPolygon);
+        map.add(libraryPolygon);
+        map.add(stadiumPolygon);
+
+        // 插件
+        AMap.plugin('AMap.ControlBar',function(){ 
+          var controlbar = new AMap.ControlBar(); //缩放工具条实例化
+          map.addControl(controlbar); //添加控件
+        });
+
         map.setFitView([canteenPolygon]);
+
+        function ZoomIn()
+        {
+          map.setZoom(map.getZoom()+0.5);
+        }
+        document.getElementById('zoomIn').addEventListener('click', ZoomIn);
+        function Zoomout()
+        {
+          map.setZoom(map.getZoom()-0.5);
+        }
+        document.getElementById('zoomOut').addEventListener('click', Zoomout);
+        function MapLocate()
+        {
+          map.setCenter([114.61716, 30.457544]);
+          map.setZoom(18);
+          map.setRotation(0);
+        }
+        document.getElementById('mapLocate').addEventListener('click', MapLocate);
+
       })
       .catch((e) => {
         console.log(e);
@@ -178,6 +241,7 @@ export default function CugGis() {
     };
   }, [map]);
 
+  // 主控件
   useEffect(() => {
     const interval = setInterval(() => {
       // 获取所有带有类名 "amap-logo" 的元素
@@ -194,12 +258,12 @@ export default function CugGis() {
       });
     }, 1000); // 每隔 1 秒执行一次
 
-    VanillaTilt.init(document.querySelectorAll(".panel2"), {
-      max: 25,
-      speed: 400,
-      startX: 20,
-      axis: "x",
-    });
+    // VanillaTilt.init(document.querySelectorAll(".panel2"), {
+    //   max: 25,
+    //   speed: 400,
+    //   startX: 20,
+    //   axis: "x",
+    // });
     
     VanillaTilt.init(document.querySelectorAll(".panel3"), {
       max: 40,
@@ -213,10 +277,15 @@ export default function CugGis() {
       clearInterval(interval);
     }
   })
-  const increaseZoom = () => {
-    map.setZoom(map.getZoom() + 1);
-  };
 
+  const contentStyle = {
+    margin: 0,
+    height: '160px',
+    color: '#fff',
+    lineHeight: '160px',
+    textAlign: 'center',
+    background: '#364d79',
+  };
   return (
     <div className="all_container">
       <div
@@ -225,26 +294,54 @@ export default function CugGis() {
         style={{ height: "100vh" }}
       >
       </div>
-      <Card className={`panel1 ${isSlide ? 'slide-out' : ''}`} hoverable={true} >
-        <Button type="primary" className="ZoomButton" onClick={handlePosition}>测试</Button>
-        测试
-      </Card>
 
-      <Card className="panel2">
+      {/* 已被取缔 */}
+      {/* <Card className={`panel2 ${isPanel2Slide? "slide-in":""}`}>
+        <VerticalLeftOutlined onClick = {handlePanel2Slide}
+          className={`slideButton ${isPanel2Slide? "slide-in":""}`}
+        >
+        </VerticalLeftOutlined>
         <div ref={containerRef} />
       </Card>
 
       <Card className="panel3">
-
-      </Card>
-
-      <div className={`openablePanel ${isOpen ? 'panel-opened':''}`}>
+      </Card> */}
+      
+      <FloatButton.Group
+            shape="square"
+            style={{
+              insetInlineEnd: 94,
+              left: "1%",
+              right:"97%",
+              TOP: "8%",
+              bottom: "1%",
+            }}
+            >
+            <FloatButton icon={<PlusOutlined />} id = "zoomIn"/>
+            <FloatButton icon={<MinusOutlined />} id = "zoomOut"/>
+            <FloatButton icon={<EnvironmentOutlined/>} id = "mapLocate"/>
+      </FloatButton.Group>
+      {/* <div className={`openablePanel ${isOpen ? 'panel-opened':''}`}>
         <UpOutlined onClick={handleOpen} className={`OpenButton ${isOpen ? 'opened':''}`}></UpOutlined>
         <div className="DividedLine"></div>
+      </div> */}
+      <div className={`mainPanel ${isOpen? "slide-in":""}`}>
+        <UpOutlined onClick={handleOpen} className={`openButton ${isOpen ? 'opened':''}`}></UpOutlined>
+        <Carousel arrows dotPosition="left" infinite={false}>
+          <div>
+            <h3 style={contentStyle}>1</h3>
+          </div>
+          <div>
+            <h3 style={contentStyle}>2</h3>
+          </div>
+          <div>
+            <h3 style={contentStyle}>3</h3>
+          </div>
+          <div>
+            <h3 style={contentStyle}>4</h3>
+          </div>
+        </Carousel>
       </div>
-      
-
-      
     </div>
     
     

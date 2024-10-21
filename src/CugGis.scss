@@ -34,7 +34,7 @@
 
   // 子动画状态
   &.slide-out {
-    transform: translateX(-38vw); // 向右滑动300px
+    transform: translateX(-38vw);
   }
 
   
@@ -57,6 +57,22 @@
   backdrop-filter: blur(5px);
   background: transparent;
 
+  // 动画
+  transition: transform 0.5s ease; // 动画过渡效果
+
+  &.slide-in{
+    transform: translateX(32vw);
+  }
+
+  .slideButton
+  {
+    // 动画效果
+    transition: transform 0.5s ease; // 动画过渡效果
+    &.slide-in {
+      transform: rotate(180deg); // 旋转180度
+    }
+  }
+
 }
 
 .panel3
@@ -77,7 +93,12 @@
 
 }
 
-
+.floatButtonGroup
+{ 
+  position: absolute;
+  margin-top: 80vh;
+  margin-left: 0vw;
+}
 
 .openablePanel {
   // 位置
@@ -88,8 +109,8 @@
   height: 21vh;
   // 颜色
   background: linear-gradient(315deg, #cacaca, #f0f0f0);
-  box-shadow:  -7px -7px 5px #bebebe,
-              7px 7px 5px #ffffff;
+  // box-shadow:  -7px -7px 5px #bebebe,
+  //             7px 7px 5px #ffffff;
   // 圆角
   border-radius: 10px;
 
@@ -128,6 +149,72 @@
 
     // 圆角
     border-radius: 10px 10px 10px 10px;
+  }
+  .controlMapType
+  {
+    position: absolute;
+    width:10vw;
+    height: 18vh;
+    margin-top: 2.5vh;
+    margin-left: 69.8%;
+    border-radius: 10px;
+    background: linear-gradient(145deg, #3a3a3a, #444444);
+  }
+  .mainControl
+  {
+    position: absolute;
+    width:23vw;
+    height: 18vh;
+    margin-top: 2.5vh;
+    margin-left: 1%;
+    border-radius: 10px;
+    background: linear-gradient(145deg, #3a3a3a, #444444);
+  }
+  .verticalDividedLine
+  // Divide the mainControl and controlMapType
+  {
+    position: absolute;
+    width: 2px;
+    height: 20vh;
+    background: #f0f0f0;
+    margin-top: 2vh;
+    margin-left: 23.7vw;
+  }
+}
+.mainPanel
+{
+  position: relative;
+  margin-top: 0.5vh;
+  height: 99vh;
+  margin-left: 70vw;
+  width: 30vw;
+  background: linear-gradient(315deg, #cacaca, #f0f0f0);
+  // box-shadow:  -7px -7px 5px #bebebe,
+  //             7px 7px 5px #ffffff;
+  // 圆角
+  border-radius: 10px;
+  transition: transform 0.5s ease; // 动画过渡效果
+  .openButton
+  {
+    position: absolute;
+    margin-left: 0.5vw;
+    top: 50%;
+    // transform: scaleY(0.5);
+    transform: translateY(-50%);
+    transform: rotate(90deg);
+    // 动画效果
+    transition: transform 0.5s ease; // 动画过渡效果
+    &.opened {
+      
+      transform: rotate(270deg); // 旋转180度
+    }
+  }
+
+  &.slide-in {
+    // 向右移动 28vw
+    transform: translateX(28vw);
+    // margin-left: 0vw;
+    // width: 30vw;
   }
 }
 
