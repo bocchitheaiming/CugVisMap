@@ -4,50 +4,109 @@
   height: 100vh;      /* 设置与视口高度相同 */
   overflow: hidden;   /* 隐藏溢出部分 */
 }
-.container
-{
-  position: absolute;
-  padding: 0px;
-  margin: 0px;
-  width: 100%;
 
+.midTitle {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  color: white;
+  text-align: center;
 }
-.panel1
-{
-  position: absolute;
-  // padding: 0px;
-  // margin: 0px;
-  width: 40vw;
-  height: 20vh;
-  margin-left: 0vw;
-  margin-top: 15vh;
 
-  // 圆角
+.location-fade {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: transparent;
+  // backdrop-filter: blur(5px);
+  padding: 10px 20px;
   border-radius: 10px;
+  /* 添加横线 */
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -5px; /* 距离文字下方的距离 */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px; /* 横线的宽度 */
+    height: 4px; /* 横线的高度 */
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1), rgba(255, 255, 255, 0)); 
+    border-radius: 5px; /* 羽化效果的边缘圆角 */
+  }
+  opacity: 0;
+  animation: fadeInOut 3s forwards;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.container {
+  position: absolute;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.floatButtonGroup { 
+  position: absolute;
+  margin-top: 80vh;
+  margin-left: 0vw;
+}
+
+.mainPanel {
+  position: relative;
+  margin-top: 0.5vh;
+  height: 99vh;
+  margin-left: 70vw;
+  width: 30vw;
+  background: linear-gradient(315deg, #cacaca, #f0f0f0);
+  border-radius: 10px;
+  transition: transform 0.5s ease;
   
-  // 毛玻璃
-  backdrop-filter: blur(5px);
-  background: transparent;
+  .openButton {
+    position: absolute;
+    margin-left: 0.5vw;
+    top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+    transition: transform 0.5s ease;
 
-  // 动画
-  transition: transform 0.5s ease; // 动画过渡效果
-
-  // 子动画状态
-  &.slide-out {
-    transform: translateX(-38vw);
+    &.opened {
+      transform: rotate(270deg);
+    }
   }
 
-  
+  &.slide-in {
+    transform: translateX(28vw);
+  }
+
+  .scrollPanel {
+    position: absolute;
+    height: 50vh;
+  }
 }
 
-.panel2
+.leftUpPanel
 {
 
   // 位置
   position: absolute;
   width: 30vw;
   height: 38vh;
-  margin-left:65vw;
+  margin-left:67vw;
   margin-top: 5vh;
 
   // 圆角
@@ -57,32 +116,22 @@
   backdrop-filter: blur(5px);
   background: transparent;
 
-  // 动画
-  transition: transform 0.5s ease; // 动画过渡效果
+  transition: transform 0.5s ease;
 
-  &.slide-in{
-    transform: translateX(32vw);
-  }
-
-  .slideButton
-  {
-    // 动画效果
-    transition: transform 0.5s ease; // 动画过渡效果
-    &.slide-in {
-      transform: rotate(180deg); // 旋转180度
-    }
+  &.slide-in {
+    transform: translateX(29.7vw);
   }
 
 }
 
-.panel3
+.leftDownPanel
 {
   // 位置
   position: absolute;
   width: 20vw;
   height: 35vh;
   margin-left: 77vw;
-  margin-top: 50vh;
+  margin-top: 60vh;
 
   // 圆角
   border-radius: 10px;
@@ -91,130 +140,9 @@
   box-shadow:  -7px -7px 5px #bebebe,
               7px 7px 5px #ffffff;
 
-}
-
-.floatButtonGroup
-{ 
-  position: absolute;
-  margin-top: 80vh;
-  margin-left: 0vw;
-}
-
-.openablePanel {
-  // 位置
-  position: relative;
-  margin-top: 98vh;
-  margin-left: 0vw;
-  width: 35vw;
-  height: 21vh;
-  // 颜色
-  background: linear-gradient(315deg, #cacaca, #f0f0f0);
-  // box-shadow:  -7px -7px 5px #bebebe,
-  //             7px 7px 5px #ffffff;
-  // 圆角
-  border-radius: 10px;
-
-  // 动画效果
-  transition: transform 0.5s ease; // 动画过渡效果
-
-  &.panel-opened {
-    transform: translateY(-19vh);  // 向上移动10vh
-    margin-left: 0vw;
-    width: 35vw;
-  }
-
-  // 展开按钮
-  .OpenButton
-  {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-
-    // 动画效果
-    transition: transform 0.5s ease; // 动画过渡效果
-
-    &.opened {
-      transform: rotate(180deg); // 旋转180度
-    }
-  }
-
-  // 分割线
-  .DividedLine
-  {
-    position: absolute;
-    width: 35vw;
-    height: 2px;
-    background: #f0f0f0;
-    margin-top: 2vh;
-
-    // 圆角
-    border-radius: 10px 10px 10px 10px;
-  }
-  .controlMapType
-  {
-    position: absolute;
-    width:10vw;
-    height: 18vh;
-    margin-top: 2.5vh;
-    margin-left: 69.8%;
-    border-radius: 10px;
-    background: linear-gradient(145deg, #3a3a3a, #444444);
-  }
-  .mainControl
-  {
-    position: absolute;
-    width:23vw;
-    height: 18vh;
-    margin-top: 2.5vh;
-    margin-left: 1%;
-    border-radius: 10px;
-    background: linear-gradient(145deg, #3a3a3a, #444444);
-  }
-  .verticalDividedLine
-  // Divide the mainControl and controlMapType
-  {
-    position: absolute;
-    width: 2px;
-    height: 20vh;
-    background: #f0f0f0;
-    margin-top: 2vh;
-    margin-left: 23.7vw;
-  }
-}
-.mainPanel
-{
-  position: relative;
-  margin-top: 0.5vh;
-  height: 99vh;
-  margin-left: 70vw;
-  width: 30vw;
-  background: linear-gradient(315deg, #cacaca, #f0f0f0);
-  // box-shadow:  -7px -7px 5px #bebebe,
-  //             7px 7px 5px #ffffff;
-  // 圆角
-  border-radius: 10px;
-  transition: transform 0.5s ease; // 动画过渡效果
-  .openButton
-  {
-    position: absolute;
-    margin-left: 0.5vw;
-    top: 50%;
-    // transform: scaleY(0.5);
-    transform: translateY(-50%);
-    transform: rotate(90deg);
-    // 动画效果
-    transition: transform 0.5s ease; // 动画过渡效果
-    &.opened {
-      
-      transform: rotate(270deg); // 旋转180度
-    }
-  }
+  transition: transform 0.5s ease;
 
   &.slide-in {
-    // 向右移动 28vw
-    transform: translateX(28vw);
-    // margin-left: 0vw;
-    // width: 30vw;
+    transform: translateX(19.7vw);
   }
 }
-

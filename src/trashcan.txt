@@ -1,0 +1,19 @@
+      {/* <div className={`mainPanel ${isOpen? "":"slide-in"}`}  id="mainPanel">
+        <UpOutlined onClick={handleOpen} className={`openButton ${isOpen ? 'opened':''}`}></UpOutlined>
+        <Carousel arrows dotPosition="left" infinite={false} className="scrollPanel">
+          <div>
+            <h3 style={contentStyle}>
+              <ObservableHistogram data={data} />
+            </h3>
+          </div>
+          <div>
+            <h3 style={contentStyle}>2</h3>
+          </div>
+          <div>
+            <h3 style={contentStyle}>3</h3>
+          </div>
+          <div>
+            <h3 style={contentStyle}>4</h3>
+          </div>
+        </Carousel>
+      </div> */}
