@@ -3,13 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/icons": "^5.5.1",
+    "@observablehq/plot": "^0.6.16",
+    "@observablehq/stdlib": "^5.8.8",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "antd": "^5.21.5",
     "cuggis": "file:",
+    "d3": "^7.9.0",
+    "d3-dsv": "^3.0.1",
+    "d3-fetch": "^3.0.1",
+    "htl": "^0.3.1",
+    "papaparse": "^5.4.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
+    "vanilla-tilt": "^1.8.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
