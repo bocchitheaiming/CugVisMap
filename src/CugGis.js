@@ -70,7 +70,10 @@ export default function CugGis() {
 
   // const containerRef = useRef();
 
-  // 控制面板main位置
+  // 控制左上面板展示内容
+  const [showGraph, setshowGraph] = useState(false);
+
+  // 控制面板位置
   const [isOpen, setIsOpen] = useState(false);
   function handleOpen() 
   {
@@ -86,9 +89,12 @@ export default function CugGis() {
 
     // 初始化地图
     AMapLoader.load({
-      key: "303d13408f77cf102158a612bd67c19a", // 申请好的Web端开发者Key，首次调用 load 时必填
-      version: "2.0", // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
-      plugins: ["AMap.Scale"], //需要使用的的插件列表，如比例尺'AMap.Scale'，支持添加多个如：['...','...']
+      "key": "303d13408f77cf102158a612bd67c19a",              // 申请好的Web端开发者Key，首次调用 load 时必填
+      "version": "2.0",       // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
+      "plugins": [],
+      "Loca":{                // 是否加载 Loca， 缺省不加载
+          "version": '2.0.0'  // Loca 版本，缺省 1.3.2
+      },
     })
       .then((AMap) => {
         // 路径设计：单独呈现中国地质大学（武汉）
@@ -205,6 +211,57 @@ export default function CugGis() {
             buildingLayer
           ],
         });
+
+        // // 初始化 Loca 容器
+        // var loca = new AMap.Loca.Container({
+        //   map: map
+        // });
+        // // 创建 PulseLinkLayer 来画飞线
+        // var pulseLink = new AMap.Loca.PulseLinkLayer({
+        //   loca: loca,
+        //   zIndex: 10,
+        //   opacity: 1,
+        //   visible: true,
+        //   zooms: [2, 22],
+        //   depth: true,
+        // });
+        // // 创建 GeoJSONSource 来指定线条坐标
+        // var geo = new AMap.Loca.GeoJSONSource({
+        //   data: {
+        //     "type": "FeatureCollection",
+        //     "features": [
+        //       {
+        //         "type": "Feature",
+        //         "geometry": {
+        //           "type": "LineString",
+        //           "coordinates": [
+        //             librarycenter,  // 起点：图书馆
+        //             canteencenter   // 终点：食堂
+        //           ]
+        //         }
+        //       }
+        //     ]
+        //   }
+        // });
+        // // 设置数据源
+        // pulseLink.setSource(geo);
+        // // 设置飞线的样式
+        // pulseLink.setStyle({
+        //   unit: 'meter',
+        //   dash: [200, 0, 200, 0],  // 设置虚线样式
+        //   lineWidth: 5,            // 线条宽度
+        //   height: function () {    // 弧线的高度
+        //     return 100;
+        //   },
+        //   speed: 2000,             // 飞线速度
+        //   lineColors: ['rgb(255, 255, 0)', 'rgb(0, 255, 255)'], // 线条颜色渐变
+        //   headColor: 'rgba(255, 255, 0, 1)', // 头部颜色
+        //   trailColor: 'rgba(255, 255, 0, 0)', // 尾部颜色
+        // });
+        // // 添加飞线图层到 Loca 容器
+        // loca.add(pulseLink);
+        // // 启动动画
+        // loca.animate.start();
 
         libraryPolygon.on('dblclick', () => {
           map.setCenter(librarycenter);
@@ -333,10 +390,14 @@ export default function CugGis() {
             <FloatButton icon={<EnvironmentOutlined/>} id = "mapLocate"/>
       </FloatButton.Group>
       <Card className={`leftUpPanel ${isOpen? "":"slide-in"}`}>
-        <ObHistogramPlot data={data} Xlabel={"窗口"} Ylabel={"订单数"} Title={"食堂窗口销售量"}/>
+        {showGraph ?
+         <ObHistogramPlot data={data} Xlabel={"窗口"} Ylabel={"订单数"} Title={"食堂窗口销售量"}/>:
+          <ObHistogramPlot data={data_3} Xlabel={"时间"} Ylabel={"订单数"} Title={"食堂销售量"}/>
+        }
       </Card>
 
       <Card className={`leftDownPanel ${isOpen? "":"slide-in"}`}>
+          <Button onClick={() => {setshowGraph(!showGraph)}}></Button>
       </Card>
     </div>
     
