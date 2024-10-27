@@ -105,16 +105,14 @@
   // 位置
   position: absolute;
   width: 30vw;
-  height: 38vh;
-  margin-left:67vw;
-  margin-top: 5vh;
+  height: 47vh;
+  margin-left:69vw;
+  margin-top: 2vh;
 
   // 圆角
   border-radius: 10px;
 
-  // 毛玻璃效果
-  backdrop-filter: blur(5px);
-  background: transparent;
+  background: linear-gradient(315deg, #cacaca, #f0f0f0);
 
   transition: transform 0.5s ease;
 
@@ -129,16 +127,14 @@
   // 位置
   position: absolute;
   width: 20vw;
-  height: 35vh;
-  margin-left: 77vw;
+  height: 37vh;
+  margin-left: 79vw;
   margin-top: 60vh;
 
   // 圆角
   border-radius: 10px;
 
   background: linear-gradient(315deg, #cacaca, #f0f0f0);
-  box-shadow:  -7px -7px 5px #bebebe,
-              7px 7px 5px #ffffff;
 
   transition: transform 0.5s ease;
 

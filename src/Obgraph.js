@@ -60,4 +60,3 @@ export const ObHistogramPlot = ({ Xlabel, Ylabel, Title, data }) => {
 
   return <div ref={plotRef}></div>;
 };
-

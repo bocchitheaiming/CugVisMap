@@ -26,6 +26,9 @@ import { PlusOutlined, MinusOutlined, EnvironmentOutlined } from "@ant-design/ic
 
 // Mine
 import { ObHistogramPlot } from './Obgraph';
+import { StadiumLine, StadiumHeatmap, StadiumBarChart, CSVData } from './StadiumFigs';
+import { CanteenBarChart, CanteenLineChart, CanteenBurnbownChart } from './CanteenFigs';
+import { LibraryLineChart, LibraryDotChart, LibraryBarChart } from './LibraryFigs';
 
 export default function CugGis() {
   const data_1 = [
@@ -82,19 +85,45 @@ export default function CugGis() {
 
   // 用reactHook形式加载地图
   let map = null;
+  // 加载数据与渲染图表
+  const [issues, setIssues] = useState([]);
+  const containerRef_l_u = useRef(null); // 用于存放图表左上的容器引用
+  const containerRef_l_d1 = useRef(null); // 用于存放图表左下的容器引用1
+  const containerRef_l_d2 = useRef(null); // 用于存放图表左下的容器引用2
   useEffect(() => {
     window._AMapSecurityConfig = {
       securityJsCode: "0c1cd8cf9a3534ac31d382a998de238d",
     };
+
+    // 获取数据
+    const cachedData = localStorage.getItem('issuesData');
+
+    if (cachedData) 
+    {
+      // 如果缓存中有数据，则直接使用
+      setIssues(JSON.parse(cachedData));
+    } 
+    else 
+    {
+      // 否则从网络获取数据
+      fetch(`./framework-issues.json`)
+        .then((response) => response.text())
+        .then((text) => {
+          const parsedData = JSON.parse(text, (key, value) =>
+            /_at$/.test(key) && value ? new Date(value) : value
+          );
+          setIssues(parsedData);
+          // 将数据存入缓存
+          localStorage.setItem('issuesData', JSON.stringify(parsedData));
+        })
+        .catch((error) => console.error("Error fetching data:", error));
+    }
 
     // 初始化地图
     AMapLoader.load({
       "key": "303d13408f77cf102158a612bd67c19a",              // 申请好的Web端开发者Key，首次调用 load 时必填
       "version": "2.0",       // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
       "plugins": [],
-      "Loca":{                // 是否加载 Loca， 缺省不加载
-          "version": '2.0.0'  // Loca 版本，缺省 1.3.2
-      },
     })
       .then((AMap) => {
         // 路径设计：单独呈现中国地质大学（武汉）
@@ -211,58 +240,105 @@ export default function CugGis() {
             buildingLayer
           ],
         });
+        var StadiumStockData;
+        var StadiumHeatmapData;
+        var StadiumBarchartData;
+        var CanteenBarChartData;
+        var CanteenLineChartData;
+        var LibraryLineChartData;
+        var LibraryDotChartData;  
+        var LibrarybarChartData;
+        async function fetchAndRenderChart() {
 
-        // // 初始化 Loca 容器
-        // var loca = new AMap.Loca.Container({
-        //   map: map
-        // });
-        // // 创建 PulseLinkLayer 来画飞线
-        // var pulseLink = new AMap.Loca.PulseLinkLayer({
-        //   loca: loca,
-        //   zIndex: 10,
-        //   opacity: 1,
-        //   visible: true,
-        //   zooms: [2, 22],
-        //   depth: true,
-        // });
-        // // 创建 GeoJSONSource 来指定线条坐标
-        // var geo = new AMap.Loca.GeoJSONSource({
-        //   data: {
-        //     "type": "FeatureCollection",
-        //     "features": [
-        //       {
-        //         "type": "Feature",
-        //         "geometry": {
-        //           "type": "LineString",
-        //           "coordinates": [
-        //             librarycenter,  // 起点：图书馆
-        //             canteencenter   // 终点：食堂
-        //           ]
-        //         }
-        //       }
-        //     ]
-        //   }
-        // });
-        // // 设置数据源
-        // pulseLink.setSource(geo);
-        // // 设置飞线的样式
-        // pulseLink.setStyle({
-        //   unit: 'meter',
-        //   dash: [200, 0, 200, 0],  // 设置虚线样式
-        //   lineWidth: 5,            // 线条宽度
-        //   height: function () {    // 弧线的高度
-        //     return 100;
-        //   },
-        //   speed: 2000,             // 飞线速度
-        //   lineColors: ['rgb(255, 255, 0)', 'rgb(0, 255, 255)'], // 线条颜色渐变
-        //   headColor: 'rgba(255, 255, 0, 1)', // 头部颜色
-        //   trailColor: 'rgba(255, 255, 0, 0)', // 尾部颜色
-        // });
-        // // 添加飞线图层到 Loca 容器
-        // loca.add(pulseLink);
-        // // 启动动画
-        // loca.animate.start();
+          StadiumStockData = await CSVData([
+            { symbol: "游泳馆", file: "/data/pool.csv" },
+            { symbol: "羽毛球馆", file: "/data/badhall.csv" },
+            { symbol: "乒乓球馆", file: "/data/tabletennis.csv" },
+            { symbol: "健身房", file: "/data/gym.csv" },
+          ]);
+    
+          StadiumHeatmapData = await CSVData([
+            { file: "./data/stadiumheatmap.csv" },
+          ]);
+          StadiumBarchartData = await CSVData([
+            { file: "./data/stadiumbarchart.csv" },
+          ]);
+          CanteenBarChartData = await CSVData([
+            { file: "./data/canteenbarchart.csv" },
+          ]);
+          CanteenLineChartData = await CSVData([
+            { file: "./data/canteenlinechart.csv" },
+          ]);
+          LibraryLineChartData = await CSVData([
+            { file: "./data/librarylinechart.csv" },
+          ]);
+          LibraryDotChartData = await CSVData([
+            { file: "./data/librarydotchart.csv" },
+          ]);
+          LibrarybarChartData = await CSVData([
+            { file: "./data/librarybarchart.csv" },
+          ]);
+          
+          // 图书馆可视化部分
+          libraryPolygon.on('dblclick', () => {
+            containerRef_l_u.current.innerHTML = "";
+            containerRef_l_d1.current.innerHTML = "";
 
+            const libraryLineChart = LibraryLineChart(LibraryLineChartData);
+            const libraryBarChart = LibraryBarChart(LibrarybarChartData);
+
+            const titleElement0 = document.createElement("h3");
+            titleElement0.innerText = "各专业学生图书馆使用频率";
+            containerRef_l_d1.current.appendChild(titleElement0);
+
+            containerRef_l_u.current.appendChild(libraryLineChart);
+            containerRef_l_d1.current.appendChild(libraryBarChart);
+
+          });
+          // 食堂可视化部分
+          canteenPolygon.on('dblclick', () => {
+            containerRef_l_u.current.innerHTML = "";
+            containerRef_l_d1.current.innerHTML = "";
+
+            const canteenLineChart = CanteenLineChart(CanteenLineChartData);
+            const canteenBarChart = CanteenBarChart(CanteenBarChartData);
+            const canteenBurnbownChart = CanteenBurnbownChart(issues);
+
+            // const titleElement1 = document.createElement("h3");
+            // titleElement1.innerText = "食堂天然气使用量图";
+
+            const titleElement2 = document.createElement("h3");
+            titleElement2.innerText = "未来必吃榜";
+
+            // containerRef_l_u.current.appendChild(titleElement1);
+            containerRef_l_u.current.appendChild(canteenLineChart);
+
+            containerRef_l_d1.current.appendChild(titleElement2);
+            containerRef_l_d1.current.appendChild(canteenBarChart);
+          });
+          // 体育馆可视化部分
+          stadiumPolygon.on('dblclick', () => {
+            containerRef_l_u.current.innerHTML = "";
+            containerRef_l_d1.current.innerHTML = "";
+
+            const stadiumLine = StadiumLine(StadiumStockData);
+            const stadiumHeatmap = StadiumHeatmap(StadiumHeatmapData);
+            // const stadiumBarChart = StadiumBarChart(StadiumBarchartData);
+
+            const titleElement3 = document.createElement("h3");
+            titleElement3.innerText = "各体育场地办卡人数";
+            containerRef_l_u.current.appendChild(titleElement3);
+            const titleElement4 = document.createElement("h3");
+            titleElement4.innerText = "日体育馆热度";
+            containerRef_l_d1.current.appendChild(titleElement4);
+            containerRef_l_u.current.appendChild(stadiumLine);
+            containerRef_l_d1.current.appendChild(stadiumHeatmap);
+          })
+
+        }
+        
+        fetchAndRenderChart();
+    
         libraryPolygon.on('dblclick', () => {
           map.setCenter(librarycenter);
           map.setZoom(20);
@@ -323,6 +399,15 @@ export default function CugGis() {
       });
 
     return () => {
+      if (containerRef_l_u.current) {
+        containerRef_l_u.current.innerHTML = "";
+      }
+      if (containerRef_l_d1.current) {
+        containerRef_l_d1.current.innerHTML = "";
+      }
+      if (containerRef_l_d2.current) {
+        containerRef_l_d2.current.innerHTML = "";
+      }
       map?.destroy();
     };
   }, [map]);
@@ -350,14 +435,7 @@ export default function CugGis() {
     }
   })
 
-  const contentStyle = {
-    margin: 0,
-    height: '50vh',
-    color: '#fff',
-    lineHeight: '160px',
-    textAlign: 'center',
-    background: '#364d79',
-  };
+  // 中央显示隐藏标题
   const [showLibrary, setShowLibrary] = useState(false);
   const [showCanteen, setShowCanteen] = useState(false);
   const [showStadium, setShowStadium] = useState(false);
@@ -390,14 +468,11 @@ export default function CugGis() {
             <FloatButton icon={<EnvironmentOutlined/>} id = "mapLocate"/>
       </FloatButton.Group>
       <Card className={`leftUpPanel ${isOpen? "":"slide-in"}`}>
-        {showGraph ?
-         <ObHistogramPlot data={data} Xlabel={"窗口"} Ylabel={"订单数"} Title={"食堂窗口销售量"}/>:
-          <ObHistogramPlot data={data_3} Xlabel={"时间"} Ylabel={"订单数"} Title={"食堂销售量"}/>
-        }
+        <div ref={containerRef_l_u}></div>
       </Card>
 
       <Card className={`leftDownPanel ${isOpen? "":"slide-in"}`}>
-          <Button onClick={() => {setshowGraph(!showGraph)}}></Button>
+          <div ref={containerRef_l_d1}></div>
       </Card>
     </div>
     
